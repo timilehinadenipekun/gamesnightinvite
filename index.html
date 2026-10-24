@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <meta content="#210c36" name="theme-color"/>
+  <title>
+   Timilehin’s Game Night | Pink Arcade
+  </title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;family=DM+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <style>
+   :root {
+    --bg:#1c092f;
+    --pink:#ff4bb5;
+    --light:#ffb9e7;
+    --yellow:#ffe77b;
+    --cyan:#79f8f1;
+    --white:#fff8ff
+}
+
+* {
+    box-sizing:border-box
+}
+
+body {
+    margin:0;
+    background:radial-gradient(ellipse at 50% -10%,#743064 0%,#2d1046 45%,var(--bg) 100%);
+    color:var(--white);
+    font-family:'DM Sans',sans-serif;
+    min-height:100vh;
+    overflow-x:hidden
+}
+
+body:before {
+    content:'';
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.12;
+    background-image:linear-gradient(#ff67bc 1px,transparent 1px),linear-gradient(90deg,#ff67bc 1px,transparent 1px);
+    background-size:46px 46px;
+    transform:perspective(250px) rotateX(60deg) scale(2);
+    transform-origin:bottom;
+    mask-image:linear-gradient(transparent 25%,black)
+}
+
+.pixel {
+    font-family:'Press Start 2P',monospace;
+    line-height:1.8
+}
+
+.wrap {
+    width:min(620px,calc(100% - 30px));
+    margin:38px auto 70px;
+    position:relative
+}
+
+.cabinet {
+    border:3px solid var(--pink);
+    border-radius:22px;
+    padding:clamp(18px,5vw,35px);
+    background:linear-gradient(145deg,rgba(69,24,85,.96),rgba(29,10,47,.98));
+    box-shadow:0 0 0 7px #2c1045,0 0 32px #ff4bb555,inset 0 0 24px #ff4bb51c
+}
+
+.top {
+    display:flex;
+    justify-content:space-between;
+    color:var(--yellow);
+    font-size:9px
+}
+
+.hearts {
+    color:var(--pink)
+}
+
+h1 {
+    font-size:clamp(22px,5vw,38px);
+    text-align:center;
+    color:#ff81cb;
+    text-shadow:3px 3px 0 #8e216b,0 0 20px #ff4bb588;
+    margin:24px 0 10px
+}
+
+h2 {
+    font-size:15px;
+    color:var(--yellow);
+    text-align:center
+}
+
+.sub {
+    text-align:center;
+    color:var(--light);
+    margin:0 0 22px
+}
+
+.arcade {
+    margin:22px auto 26px;
+    width:185px;
+    height:145px;
+    background:#ff67bc;
+    border:5px solid #ffb9e7;
+    border-radius:18px 18px 10px 10px;
+    box-shadow:8px 9px 0 #93256e;
+    position:relative;
+    transform:rotate(-3deg)
+}
+
+.screen {
+    background:#240c3b;
+    border:5px solid #b82d84;
+    border-radius:8px;
+    margin:13px 15px 0;
+    height:78px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:36px
+}
+
+.controls {
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    margin-top:10px
+}
+
+.plus {
+    color:var(--yellow);
+    font-weight:900;
+    font-size:23px;
+    line-height:1
+}
+
+.dots {
+    color:var(--cyan);
+    font-size:23px;
+    letter-spacing:6px
+}
+
+.btn {
+    width:100%;
+    border:0;
+    border-radius:12px;
+    background:var(--pink);
+    color:#230b32;
+    padding:18px;
+    font:11px 'Press Start 2P',monospace;
+    line-height:1.6;
+    cursor:pointer;
+    box-shadow:0 6px 0 #a52877,0 0 20px #ff4bb54d;
+    transition:transform .15s
+}
+
+.btn:hover {
+    transform:translateY(-2px)
+}
+
+.btn:active {
+    transform:translateY(4px);
+    box-shadow:0 2px 0 #a52877
+}
+
+.secondary {
+    background:#302048;
+    color:#ffd1ef;
+    box-shadow:0 5px 0 #180e28;
+    border:1px solid #b857a0
+}
+
+.info {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin:22px 0
+}
+
+.tile {
+    border:1px solid #b853a0;
+    border-radius:12px;
+    background:#37174c;
+    padding:16px;
+    text-align:center
+}
+
+.tile strong {
+    display:block;
+    color:var(--yellow);
+    font-size:12px;
+    margin:8px 0
+}
+
+.tile span {
+    font-size:13px;
+    color:#f8d6ed
+}
+
+.notice {
+    border:1px dashed #fa91d1;
+    border-radius:12px;
+    padding:16px;
+    line-height:1.6;
+    color:#f8d6ed;
+    background:#4c2055
+}
+
+.notice b {
+    color:var(--cyan)
+}
+
+.panel {
+    display:none
+}
+
+.panel.active {
+    display:block;
+    animation:rise .35s ease
+}
+
+@keyframes rise {
+    from {
+        opacity:0;
+        transform:translateY(12px)
+    }
+
+    to {
+        opacity:1;
+        transform:translateY(0)
+    }
+
+}
+
+label {
+    display:block;
+    color:#ffd0eb;
+    font-weight:700;
+    margin:18px 0 7px
+}
+
+input,select,textarea {
+    width:100%;
+    border:2px solid #9c4d91;
+    border-radius:10px;
+    padding:14px;
+    background:#230e38;
+    color:white;
+    font:16px 'DM Sans',sans-serif
+}
+
+input:focus,select:focus,textarea:focus {
+    outline:2px solid var(--cyan);
+    outline-offset:2px
+}
+
+textarea {
+    min-height:85px;
+    resize:vertical
+}
+
+.small {
+    font-size:12px;
+    color:#e9b9db;
+    line-height:1.6
+}
+
+.choices {
+    display:grid;
+    gap:10px
+}
+
+.choice {
+    border:2px solid #9c4d91;
+    border-radius:10px;
+    padding:13px;
+    cursor:pointer;
+    background:#230e38
+}
+
+.choice:has(input:checked) {
+    border-color:var(--cyan);
+    background:#44305a
+}
+
+.choice input {
+    width:auto;
+    margin-right:9px;
+    accent-color:var(--pink)
+}
+
+.buttons {
+    display:grid;
+    gap:13px;
+    margin-top:24px
+}
+
+.error {
+    color:#ffe77b;
+    margin-top:12px
+}
+
+.success {
+    text-align:center
+}
+
+.success .icon {
+    font-size:55px;
+    margin:18px
+}
+
+.footer {
+    text-align:center;
+    font-size:11px;
+    color:#d8a5cb;
+    margin-top:24px
+}
+
+.spark {
+    position:absolute;
+    font-size:22px;
+    animation:float 3s ease-in-out infinite;
+    pointer-events:none
+}
+
+.s1 {
+    left:-9px;
+    top:105px
+}
+
+.s2 {
+    right:-8px;
+    top:220px;
+    animation-delay:1s
+}
+
+@keyframes float {
+    50% {
+        transform:translateY(-12px) rotate(10deg)
+    }
+
+}
+
+@media(max-width:400px) {
+    .info {
+        grid-template-columns:1fr
+    }
+
+    .top {
+        font-size:7px
+    }
+
+    .btn {
+        font-size:9px
+    }
+
+}
+  </style>
+ </head>
+ <body>
+  <main class="wrap">
+   <span class="spark s1">
+    💗
+   </span>
+   <span class="spark s2">
+    ✨
+   </span>
+   <div class="cabinet">
+    <div class="top pixel">
+     <span class="hearts">
+      ♥ ♥ ♥
+     </span>
+     <span>
+      1UP · OCT 27
+     </span>
+    </div>
+    <h1 class="pixel">
+     TIMILEHIN'S
+     <br/>
+     GAME NIGHT
+    </h1>
+    <p class="sub">
+     ✦ pink arcade edition ✦
+    </p>
+    <section class="panel active" id="welcome">
+     <div aria-hidden="true" class="arcade">
+      <div class="screen">
+       🕹️
+      </div>
+      <div class="controls">
+       <span class="plus">
+        ✚
+       </span>
+       <span class="dots">
+        ● ●
+       </span>
+      </div>
+     </div>
+     <h2 class="pixel">
+      READY, PLAYER ONE?
+     </h2>
+     <p style="text-align:center;color:#f3c9e5">
+      Games, food, friendly competition and good vibes. You're invited!
+     </p>
+     <div class="buttons">
+      <button class="btn" onclick="show('details')">
+       ▶ PRESS START
+      </button>
+     </div>
+    </section>
+    <section class="panel" id="details">
+     <h2 class="pixel">
+      LEVEL 01: THE INVITE
+     </h2>
+     <div class="info">
+      <div class="tile">
+       📅
+       <strong>
+        TUESDAY
+       </strong>
+       <span>
+        October 27, 2026
+       </span>
+      </div>
+      <div class="tile">
+       🎲
+       <strong>
+        7:30 PM
+       </strong>
+       <span>
+        Games begin
+       </span>
+      </div>
+      <div class="tile">
+       🚉
+       <strong>
+        7:00 PM
+       </strong>
+       <span>
+        Meet at University Station
+       </span>
+      </div>
+      <div class="tile">
+       💗
+       <strong>
+        McKERNAN
+       </strong>
+       <span>
+        Edmonton neighbourhood
+       </span>
+      </div>
+     </div>
+     <div class="notice">
+      📍
+      <b>
+       Meeting point:
+      </b>
+      University Station at
+      <b>
+       7:00 PM
+      </b>
+      . We'll head to McKernan together. The exact home address isn't posted here.
+     </div>
+     <div class="buttons">
+      <button class="btn" onclick="show('rsvp')">
+       ▶ RSVP NOW
+      </button>
+      <button class="btn secondary" onclick="show('welcome')">
+       ◀ BACK
+      </button>
+     </div>
+    </section>
+    <section class="panel" id="rsvp">
+     <h2 class="pixel">
+      LEVEL 02: JOIN THE GAME
+     </h2>
+     <p class="sub">
+      Claim your player slot 💌
+     </p>
+     <form id="rsvpForm">
+      <input name="event" type="hidden" value="Timilehin's Game Night — October 27, 2026"/>
+      <label for="name">
+       PLAYER NAME *
+      </label>
+      <input id="name" maxlength="100" name="name" placeholder="Your name" required=""/>
+      <label>
+       ARE YOU COMING? *
+      </label>
+      <div class="choices">
+       <label class="choice">
+        <input name="attendance" required="" type="radio" value="Yes"/>
+        💖 YES! I'M IN
+       </label>
+       <label class="choice">
+        <input name="attendance" type="radio" value="Maybe"/>
+        👀 MAYBE
+       </label>
+       <label class="choice">
+        <input name="attendance" type="radio" value="No"/>
+        💔 CAN'T MAKE IT
+       </label>
+      </div>
+      <label for="diet">
+       DIETARY RESTRICTIONS / ALLERGIES
+      </label>
+      <textarea id="diet" name="dietary_restrictions" placeholder="Anything I should know? (Optional)"></textarea>
+      <label for="message">
+       MESSAGE TO HOST (OPTIONAL)
+      </label>
+      <textarea id="message" name="message" placeholder="Your message..."></textarea>
+      <p class="small">
+       Your response will be sent to the host via Formspree. Please don't include sensitive medical details beyond what you'd like the host to know.
+      </p>
+      <div class="error" id="error" role="alert">
+      </div>
+      <div class="buttons">
+       <button class="btn" id="submit" type="submit">
+        ★ SUBMIT RSVP ★
+       </button>
+       <button class="btn secondary" onclick="show('details')" type="button">
+        ◀ BACK
+       </button>
+      </div>
+     </form>
+    </section>
+    <section class="panel success" id="success">
+     <div class="icon">
+      🏆💗
+     </div>
+     <h2 class="pixel">
+      RSVP RECEIVED!
+     </h2>
+     <p id="successMessage">
+      Your response is in. Thanks for playing!
+     </p>
+     <div class="buttons">
+      <button class="btn" onclick="show('welcome')">
+       ↻ PLAY AGAIN
+      </button>
+     </div>
+    </section>
+   </div>
+   <div class="footer pixel">
+    ♥ INSERT FUN, NOT COINS ♥
+   </div>
+  </main>
+  <script>
+   // Formspree endpoint for RSVP submissions.
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xrppbgyl';
+
+function show(id) {
+    document.querySelectorAll('.panel').forEach((panel) => {
+        panel.classList.toggle('active', panel.id === id);
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('rsvpForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const error = document.getElementById('error');
+    const button = document.getElementById('submit');
+
+    error.textContent = '';
+
+    if (FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')) {
+        error.textContent = 'RSVPs are not connected yet. The host needs to add their Formspree form ID.';
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = 'SENDING...';
+
+    try {
+        const response = await fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { Accept: 'application/json' }
+        });
+
+        if (!response.ok) {
+            throw new Error('Submission failed. Please try again.');
+        }
+
+        const name = document.getElementById('name').value.trim();
+        document.getElementById('successMessage').textContent = `${name}, your RSVP has been received! 💗`;
+
+        form.reset();
+        show('success');
+    } catch (errorCaught) {
+        error.textContent = errorCaught.message;
+    } finally {
+        button.disabled = false;
+        button.textContent = '★ SUBMIT RSVP ★';
+    }
+});
+  </script>
+ </body>
+</html>
+
